@@ -1621,6 +1621,18 @@ canvas#heroCanvas {
       #animation-container #heroCanvas { display: none; }
       #animation-container #heroVideo { display: block; }
     }
+    /* ===== Mobile: swipeable card rows (stop the endless vertical card stack) ===== */
+    @media (max-width: 640px) {
+      #specialtiesGrid, #whyChooseGrid, #servicesGrid, #techGrid, #testimonialsGrid, #resultsGrid, #articlesGrid, #guidesGrid {
+        display: flex; grid-template-columns: none;
+        overflow-x: auto; overflow-y: hidden;
+        scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        gap: 14px; padding: 4px 20px 18px; margin: 0 -20px; scroll-padding-left: 20px;
+      }
+      #specialtiesGrid > *, #whyChooseGrid > *, #servicesGrid > *, #techGrid > *, #testimonialsGrid > *, #resultsGrid > *, #articlesGrid > *, #guidesGrid > * { flex: 0 0 84%; max-width: 84%; scroll-snap-align: center; }
+      #specialtiesGrid::-webkit-scrollbar, #whyChooseGrid::-webkit-scrollbar, #servicesGrid::-webkit-scrollbar, #techGrid::-webkit-scrollbar, #testimonialsGrid::-webkit-scrollbar, #resultsGrid::-webkit-scrollbar, #articlesGrid::-webkit-scrollbar, #guidesGrid::-webkit-scrollbar { height: 4px; }
+      #specialtiesGrid::-webkit-scrollbar-thumb, #whyChooseGrid::-webkit-scrollbar-thumb, #servicesGrid::-webkit-scrollbar-thumb, #techGrid::-webkit-scrollbar-thumb, #testimonialsGrid::-webkit-scrollbar-thumb, #resultsGrid::-webkit-scrollbar-thumb, #articlesGrid::-webkit-scrollbar-thumb, #guidesGrid::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 99px; }
+    }
 
   </style>
 </head>

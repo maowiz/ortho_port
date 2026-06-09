@@ -1609,6 +1609,12 @@ canvas#heroCanvas {
     .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
     .lenis.lenis-stopped { overflow: hidden; }
     .lenis.lenis-smooth iframe { pointer-events: none; }
+    /* ===== Mobile scroll performance ===== */
+    @media (max-width: 900px) {
+      .nav.scrolled { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #fff; }
+      .card.has-media:hover .card-media img { transform: none; }
+    }
+    .reveal { will-change: auto; }
 
   </style>
 </head>
@@ -2579,7 +2585,7 @@ canvas#heroCanvas {
         this.loadedCount = 0;
         this.isStarted = false;
 
-        this.isMobile = window.innerWidth < 768;
+        this.isMobile = window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
         // Load every 2nd frame on phones to roughly halve network/decoding cost.
         this.frameStep = 2; // every 2nd frame on all devices -> fast first load
         this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2682,8 +2688,8 @@ canvas#heroCanvas {
 
         this.drawFrame(0);
 
-        if (this.reducedMotion) {
-          // No pinning / scrubbing — show a single representative frame, keep page scrollable.
+        if (this.reducedMotion || this.isMobile) {
+          // Touch / reduced-motion: no pin/scrub/Lenis -> native smooth scroll with a static hero frame.
           if (this.phases[0]) this.phases[0].classList.add('active');
           return;
         }
@@ -4280,8 +4286,10 @@ canvas#heroCanvas {
     // GSAP SCROLL ANIMATIONS FOR SECTIONS
     // ========================================
     function initGSAPAnimations() {
-      // Only run if GSAP is loaded and we're on home page
+      // Only run if GSAP is loaded
       if (typeof gsap === 'undefined') return;
+      // Touch devices: skip scroll-coupled parallax/scrub (use native scroll + .reveal) for smoothness
+      if (window.matchMedia('(max-width: 900px), (pointer: coarse)').matches) return;
 
       // Parallax for banner images
       gsap.utils.toArray('section[style*="height"]').forEach(section => {

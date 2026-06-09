@@ -2581,7 +2581,7 @@ canvas#heroCanvas {
 
         this.isMobile = window.innerWidth < 768;
         // Load every 2nd frame on phones to roughly halve network/decoding cost.
-        this.frameStep = this.isMobile ? 2 : 1;
+        this.frameStep = 2; // every 2nd frame on all devices -> fast first load
         this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         this.dpr = this.isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
         this.lastDrawn = -1;
@@ -2638,7 +2638,7 @@ canvas#heroCanvas {
         const order = this.buildLoadList();
         const totalToLoad = order.length;
         // Reveal the site as soon as a small first batch is ready (or quickly via fallback).
-        const readyThreshold = totalToLoad; // wait for every frame so the scrub is never stuck
+        const readyThreshold = Math.min(6, totalToLoad); // reveal fast, stream the rest in background
         const bar = document.querySelector('.preloader-bar-fill');
 
         const markProgress = () => {
@@ -2665,8 +2665,8 @@ canvas#heroCanvas {
         });
 
         // Fallbacks so the user is never stuck on the preloader.
-        setTimeout(() => { if (!this.isStarted && this.loadedCount >= totalToLoad * 0.65) this.startExperience(); }, 9000);
-        setTimeout(() => { if (!this.isStarted) this.startExperience(); }, 15000);
+        setTimeout(() => { if (!this.isStarted && this.loadedCount >= 1) this.startExperience(); }, 1500);
+        setTimeout(() => { if (!this.isStarted) this.startExperience(); }, 8000);
       }
 
       startExperience() {

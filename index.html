@@ -1621,17 +1621,44 @@ canvas#heroCanvas {
       #animation-container #heroCanvas { display: none; }
       #animation-container #heroVideo { display: block; }
     }
-    /* ===== Mobile: swipeable card rows (stop the endless vertical card stack) ===== */
+    /* ===== Mobile: compact 2-column grids (research: visible grids beat hidden carousels) ===== */
     @media (max-width: 640px) {
-      #specialtiesGrid, #whyChooseGrid, #servicesGrid, #techGrid, #testimonialsGrid, #resultsGrid, #articlesGrid, #guidesGrid {
-        display: flex; grid-template-columns: none;
-        overflow-x: auto; overflow-y: hidden;
-        scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-        gap: 14px; padding: 4px 20px 18px; margin: 0 -20px; scroll-padding-left: 20px;
+      #specialtiesGrid, #whyChooseGrid, #techGrid, #guidesGrid, #servicesGrid, #articlesGrid {
+        grid-template-columns: 1fr 1fr; gap: 12px;
       }
-      #specialtiesGrid > *, #whyChooseGrid > *, #servicesGrid > *, #techGrid > *, #testimonialsGrid > *, #resultsGrid > *, #articlesGrid > *, #guidesGrid > * { flex: 0 0 84%; max-width: 84%; scroll-snap-align: center; }
-      #specialtiesGrid::-webkit-scrollbar, #whyChooseGrid::-webkit-scrollbar, #servicesGrid::-webkit-scrollbar, #techGrid::-webkit-scrollbar, #testimonialsGrid::-webkit-scrollbar, #resultsGrid::-webkit-scrollbar, #articlesGrid::-webkit-scrollbar, #guidesGrid::-webkit-scrollbar { height: 4px; }
-      #specialtiesGrid::-webkit-scrollbar-thumb, #whyChooseGrid::-webkit-scrollbar-thumb, #servicesGrid::-webkit-scrollbar-thumb, #techGrid::-webkit-scrollbar-thumb, #testimonialsGrid::-webkit-scrollbar-thumb, #resultsGrid::-webkit-scrollbar-thumb, #articlesGrid::-webkit-scrollbar-thumb, #guidesGrid::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 99px; }
+      #resultsGrid, #testimonialsGrid { grid-template-columns: 1fr; }
+
+      .card.has-media .card-media { height: 102px; }
+      .card.has-media .card-media-icon { width: 36px; height: 36px; left: 12px; bottom: -15px; border-radius: 10px; }
+      .card.has-media .card-media-icon svg { width: 18px; height: 18px; }
+      .card.has-media .card-body { padding: 22px 13px 15px; }
+
+      .card { padding: 20px 15px; }
+      .card-title { font-size: 0.99rem; line-height: 1.25; margin-bottom: 7px; }
+      .card-text { font-size: 0.81rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+      .card-link { margin-top: 11px; font-size: 0.79rem; }
+      .card-icon { width: 50px; height: 50px; margin-bottom: 13px; border-radius: 14px; }
+      .card-icon svg { width: 25px; height: 25px; }
+
+      #guidesGrid .card { padding: 22px 14px; text-align: center; }
+      #guidesGrid .card-icon { width: 66px !important; height: 66px !important; margin: 0 auto 14px !important; }
+      #guidesGrid .btn { display: none; }
+
+      .service-card-img { height: 108px; }
+      .service-card-body { padding: 16px 14px 18px; }
+      .service-card-body h3 { font-size: 1rem; margin-bottom: 7px; }
+      .service-card-body p { font-size: 0.81rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+      .service-card .service-tag { display: none; }
+
+      #articlesGrid > .card > div:first-child { height: 116px !important; }
+      #articlesGrid > .card > div:last-child { padding: 14px !important; }
+      #articlesGrid h3 { font-size: 0.95rem !important; }
+      #articlesGrid p { font-size: 0.8rem !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+      .testimonial-card { padding: 22px 18px; }
+      .result-quote { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+      .card:active, .service-card:active, .testimonial-card:active { transform: scale(0.985); }
     }
 
   </style>

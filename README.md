@@ -10,23 +10,23 @@ A fast, mobile-first, single-file website for Prof. Dr. Naseer Ahmad Chaudhary
 
 ---
 
-## ⚠️ Placeholders to replace before going live
+## ✅ Real details now in the site
 
-Everything below is a **clearly-marked placeholder** — replace with the real details:
+- **Two clinics** (Contact page + footer): **Bahawalpur** — 10‑A, Lane 2, Medical Colony, BVH (Mon–Fri 4–10 PM, **+92 345 9678595**); **Rahim Yar Khan** — 1‑A Model Town, Shaikh Zaid Hospital Road (Sunday 10 AM–5 PM, **+92 300 8674595**).
+- **Primary WhatsApp / Call / nav** number: **+92 300 8674595** (RYK). Map "Get Directions" → his Google Maps pin.
+- **Professional photos** (AI): home intro, About bio, About banner.
+- Qualifications/positions (MBBS AIMC, FCPS, CHPE, AO Trauma; HOD BVH, Visiting Prof QAMC, Ex‑HOD SZMC RYK) + 4.9/5 / 780+ reviews + languages.
 
-| What | Current placeholder | Where |
-|------|--------------------|-------|
-| **Phone** | `+92 300 0000000` | Admin → Surgeon Profile (or find/replace in `index.html`) |
-| **WhatsApp** | `923000000000` | Admin → Profile / find-replace `923000000000` |
-| **Email** | `info@drnaseerchaudhary.com` | Admin → Profile |
-| **Private clinic** name/address & **OPD timings** | placeholder text | Contact page block + Admin → Profile |
-| **Professional photo** | stock photo at `images/doctor-portrait.jpg` | replace that file (see below) |
-| **Stats** | 25+ yrs, 10,000+ procedures, 98% | Admin → Surgeon Profile (set real, honest numbers) |
+## ⚠️ Still optional / to confirm
+
+| What | Status | Where to change |
+|------|--------|-----------------|
+| **Email** | none yet (Email button removed; add when available) | Admin → Profile, then re‑add to Contact/footer |
+| **Stats** | placeholders: 25+ yrs, 10,000+ procedures, 98% | Admin → Surgeon Profile (set real, honest numbers) |
 | **Patient reviews** | sample testimonials | Admin → Testimonials |
-| **Map** | Google search-embed for "Bahawal Victoria Hospital" | swap the iframe `src` on the Contact page for the exact location |
+| **Primary number** | currently RYK (+92 300 8674595) | to make Bahawalpur primary, find/replace `923008674595`→`923459678595` and `+92 300 8674595`→`+92 345 9678595` |
 
-> The names, titles, qualifications (MBBS AIMC, FCPS, CHPE, AO Trauma) and positions (HOD BVH, Visiting Prof QAMC,
-> Ex-HOD SZMC RYK) are already filled in from the brief — please double-check them for accuracy.
+> Please double‑check the qualifications/positions for accuracy.
 
 ### Replacing the photo
 A real, professional photo (ideally a clinic/formal head-and-shoulders shot) makes a big difference.

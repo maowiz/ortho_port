@@ -1548,7 +1548,7 @@ canvas#heroCanvas {
 }
 
     /* ===== Hero: cinematic dark backdrop. The high-res seq1 frames have a LIGHT bg, so we darken them on the GPU. ===== */
-    canvas#heroCanvas { filter: brightness(0.50) contrast(1.10) saturate(1.16); }
+    canvas#heroCanvas { filter: contrast(1.05) saturate(1.06); }
     .hero-phase .btn-outline { border-color: rgba(255,255,255,0.40); color: #fff; }
     .hero-phase .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: #fff; color: #fff; }
     .hero-text-overlay::before {
@@ -1615,6 +1615,12 @@ canvas#heroCanvas {
       .card.has-media:hover .card-media img { transform: none; }
     }
     .reveal { will-change: auto; }
+    /* Hero: autoplay video on phones/touch, canvas scrub on desktop */
+    #heroVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; z-index: 0; background: #05101F; }
+    @media (max-width: 900px), (pointer: coarse) {
+      #animation-container #heroCanvas { display: none; }
+      #animation-container #heroVideo { display: block; }
+    }
 
   </style>
 </head>
@@ -1713,6 +1719,9 @@ canvas#heroCanvas {
 
       </div>
 
+      <video id="heroVideo" muted playsinline preload="none" aria-hidden="true" poster="frames/frame-001.webp">
+        <source src="frames/hero.mp4" type="video/mp4">
+      </video>
       <canvas id="heroCanvas" role="img" aria-label="Orthopaedic surgery animation sequence"
         style="position:absolute;top:0;left:0;width:100%;height:100vh;object-fit:cover;"></canvas>
       <div class="hero-canvas-overlay"></div>
@@ -2525,7 +2534,7 @@ canvas#heroCanvas {
         dataVersion: 2,
         primaryColor: "#1366C2",
         siteName: "Prof. Dr. Naseer Ahmad Chaudhary",
-        heroFrameCount: 120,
+        heroFrameCount: 121,
         heroFrameFolder: "frames",
         heroFramePrefix: "frame-",
         heroFrameExtension: "webp"
@@ -2568,6 +2577,7 @@ canvas#heroCanvas {
         this.ctx = this.canvas.getContext('2d');
         this.phases = document.querySelectorAll('.hero-phase');
         this.preloader = document.getElementById('preloader');
+        this.video = document.getElementById('heroVideo');
 
         this.frameCount = siteData.settings.heroFrameCount;
         this.images = [];
@@ -2593,9 +2603,27 @@ canvas#heroCanvas {
       }
 
       init() {
+        // Phones / touch: hardware-decoded autoplay video (smooth, not scroll-coupled). Desktop: canvas scrub.
+        if (this.isMobile && this.video) { this.startVideoHero(); return; }
         this.resize();
         window.addEventListener('resize', () => this.resize(), { passive: true });
         this.preloadFrames();
+      }
+
+      startVideoHero() {
+        const v = this.video, self = this;
+        if (this.phases[0]) this.phases[0].classList.add('active');
+        const reveal = () => {
+          if (self.isStarted) return;
+          self.isStarted = true;
+          if (self.preloader) self.preloader.classList.add('hidden');
+          document.body.style.overflow = '';
+        };
+        try { v.muted = true; if (!this.reducedMotion) { const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); } } catch (e) {}
+        v.addEventListener('loadeddata', reveal, { once: true });
+        v.addEventListener('canplaythrough', reveal, { once: true });
+        setTimeout(reveal, 1200);
+        setTimeout(reveal, 4000);
       }
 
       resize() {
@@ -2678,13 +2706,39 @@ canvas#heroCanvas {
 
         this.drawFrame(0);
 
-        if (this.reducedMotion || this.isMobile) {
-          // Touch / reduced-motion: no pin/scrub/Lenis -> native smooth scroll with a static hero frame.
+        if (this.reducedMotion) {
+          // Reduced motion: static hero frame, native scroll.
           if (this.phases[0]) this.phases[0].classList.add('active');
+          return;
+        }
+        if (this.isMobile) {
+          // Touch devices: autoplay the reveal ONCE (not scroll-coupled) so scrolling stays native-smooth.
+          this.playIntro();
           return;
         }
         if (window.initSmoothScroll) window.initSmoothScroll();
         this.initScrollTrigger();
+      }
+
+      playIntro() {
+        // Pure requestAnimationFrame autoplay (no GSAP ticker dependency) -> reliable on mobile, not scroll-coupled.
+        if (this.phases[0]) this.phases[0].classList.add('active');
+        const total = this.frameCount - 1, dur = 4200, delay = 500;
+        let startT = null;
+        const step = (t) => {
+          if (startT === null) startT = t;
+          const e = t - startT - delay;
+          if (e >= 0) {
+            const prog = Math.min(e / dur, 1);
+            const eased = prog < 0.5 ? 2 * prog * prog : 1 - Math.pow(-2 * prog + 2, 2) / 2;
+            this.currentFrame.index = eased * total;
+            this.drawFrame(this.currentFrame.index);
+            this.updatePhases();
+            if (prog >= 1) return;
+          }
+          requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
       }
 
       initScrollTrigger() {

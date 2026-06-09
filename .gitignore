@@ -1,0 +1,10 @@
+# Local tooling / preview config
+.claude/
+
+# Doctor's personal source photos (not used by the site)
+profile/
+
+# Python
+__pycache__/
+*.pyc
+_*.py
